@@ -1,38 +1,45 @@
-# Triangala (3 to 4-Player Mancala/Mangala)
-This project is a Reinforcement Learning agent that learns to play Mangala, a traditional Turkish board game of strategy, through Self-Play.
-The agent is used for learning the best outcomes to help to set the rules for 3 (or more)-player version for the game. 
+# Triangala (3+ Player Mancala)
 
-## 🚀 Project Goal and Development Process
+This repository contains a C++ Reinforcement Learning agent built to scale Mangala (a traditional Turkish mancala game) from a 2-player game to a 3 or 4-player format.
 
-### 1. The Problem: Curse of Dimensionality
-In the game of Mangala, calculating the distribution of 48 stones across 14 different slots (12 pits + 2 stores) results in approximately **2.7 Trillion** possible board states. 
-The initially tested classic Q-Learning model could only observe about 0.0002% of all possible states even after 500,000 training games. It was completely helpless against previously unseen board configurations, resorting to purely random moves.
+Standard 2-player rules break down completely when you add a third person to the board. The ultimate goal of this project is to use a self-playing RL agent to test different mechanics and figure out a balanced, playable rule set for 3+ players.
 
-### 2. The Solution: Feature-Based Approach
-Since it is impossible for the agent to memorize trillions of states, the model was updated utilizing **Linear Function Approximation**. The agent now extracts 17 core features from any given board state:
-* Number of stones in each of its own 6 pits
-* Number of stones in each of the opponent's 6 pits
-* Number of its own empty pits
-* Number of the opponent's empty pits
-* "Empty pit threats" against its own pits
-* "Empty pit threats" against the opponent's pits
+## The Roadblock: State Space Explosion
 
-As the agent plays, it updates the **weights** of these 17 features. This allows it to make intuitive strategic deductions, such as "the opponent has stones opposite my empty pit, this is a dangerous state," even when encountering a board layout for the very first time.
+I initially tried using standard tabular Q-Learning, but it failed almost immediately due to the sheer size of the game's state space.
 
-## ⚙️ Setup and Execution
+The theoretical distribution of 48 stones across 14 slots (12 pits and 2 stores) results in approximately **2.7 trillion** possible board states. Even if we filter out the physically impossible configurations based on the game's rules, the *reachable* state space is still massive—roughly **889 billion** (comparable to similar solved mancala games like Awari).
 
-The project is written in the **C++17** standard and does not require any external libraries.
+I ran 500,000 training games, simulating about 15 million total states. This means the agent only managed to observe around **0.0016%** of the realistic board possibilities. Whenever it encountered a board it hadn't already memorized in its table, it just defaulted to random, nonsensical moves.
 
-### Compile
-You can compile the project by running the following command in your terminal:
+## The Fix: Feature-Based TD Learning
+
+Since memorizing the board is impossible, I switched the model to **Linear Function Approximation**. Instead of tracking the exact board layout, the agent now extracts 26 core features from any given state:
+
+* Stone counts in its own 6 pits
+* Stone counts in the opponent's 6 pits
+* Number of empty pits on its own side
+* Number of empty pits on the opponent's side
+* Active "empty pit threats" against its own pits
+* Active "empty pit threats" against the opponent's pits
+
+During self-play, the agent updates the **weights** of these features. This gives it a sort of intuition—it learns that leaving an empty pit opposite a loaded one is a bad idea, even if it has never seen that specific board combination before.
+
+## Project Structure & Current State
+
+The codebase is currently split into a few iterations as I work out the logic. Here is where things stand:
+
+* **`Mangala0`**: A basic implementation, but the turn logic is bugged. Instead of properly distributing stones one by one, it just takes all the stones inside a hole. Needs fixing.
+* **`Mangala1`**: Currently broken. The core logic failed in this iteration and requires a complete rewrite.
+* **`MangalaGameAuto`**: The main script where the game plays itself. It uses a `makeBestMove` function to evaluate and execute the optimal move. Currently, this runs on 2-player mechanics. Once the base is completely stable, this file will be the bridge to introduce the AI for 3-player testing. The main bottleneck right now is hardcoding the custom rules needed to actually make a 3-player game function logically before the AI can train on it.
+
+## Build and Run
+
+Written in plain C++17. There are no external dependencies or libraries.
+
+To compile:
+
 ```bash
 g++ -std=c++17 -O2 -o mangala_td mangala_td.cpp
 
-
-Mangala0 - takes all the stones inside the hole (kuyu). Turns are not going as they should be.
-
-Mangala1 - Everything is wrong. Has to be corrected.
-
-MangalaGameAuto - Game/Code plays by itself. Has a function called "makeBestMove" to make the best move. 
-AI can be included to make it playable with 3-Players and when it becomes playable with 3-Players.
-I have to define best rules to play with just to make Mangala playable with 3-Players. 
+```
