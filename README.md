@@ -4,7 +4,7 @@ This repository contains a C++ Reinforcement Learning agent built to scale Manga
 
 Standard 2-player rules break down completely when you add a third person to the board. The ultimate goal of this project is to use a self-playing RL agent to test different mechanics and figure out a balanced, playable rule set for 3+ players.
 
-## The Roadblock: State Space Explosion
+## The State Space Explosion Issue
 
 I initially tried using standard tabular Q-Learning, but it failed almost immediately due to the sheer size of the game's state space.
 
