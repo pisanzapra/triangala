@@ -1,4 +1,4 @@
-# Triangala (3+ Player Mancala)
+# Triangala: RL Agent for 3+ Player Mangala
 
 This repository contains a C++ Reinforcement Learning agent built to scale Mangala (a traditional Turkish mancala game) from a 2-player game to a 3 or 4-player format.
 
@@ -29,17 +29,30 @@ During self-play, the agent updates the **weights** of these features. This give
 
 The codebase is currently split into a few iterations as I work out the logic. Here is where things stand:
 
-* **`Mangala0`**: A basic implementation, but the turn logic is bugged. Instead of properly distributing stones one by one, it just takes all the stones inside a hole. Needs fixing.
-* **`Mangala1`**: Currently broken. The core logic failed in this iteration and requires a complete rewrite.
-* **`MangalaGameAuto`**: The main script where the game plays itself. It uses a `makeBestMove` function to evaluate and execute the optimal move. Currently, this runs on 2-player mechanics. Once the base is completely stable, this file will be the bridge to introduce the AI for 3-player testing. The main bottleneck right now is hardcoding the custom rules needed to actually make a 3-player game function logically before the AI can train on it.
+<details>
+  <summary>First_Implementation folder:</summary>
+
+  * **`Mangala0`**: A basic implementation, but the turn logic is bugged. Instead of properly distributing stones one by one, it just takes all the stones inside a hole. Needs fixing.
+  * **`Mangala1`**: Currently broken. The core logic failed in this iteration and requires a complete rewrite.
+  * **`MangalaGameAuto`**: The main script where the game plays itself. It uses a `makeBestMove` function to evaluate and execute the optimal move. Currently, this runs on 2-player mechanics. Once the base is completely stable, this file will be the bridge to introduce the AI for 3-player testing. The main bottleneck right now is hardcoding the custom rules needed to actually make a 3-player game function logically before the AI can train on it.
+</details>
+
+<details>
+  <summary>Q-Learning Version folder:</summary>
+
+  * **`mangala_ai`**: The failed tabular Q-Learning model.
+</details>
+
+<details>
+  <summary>TD-Learning folder:</summary>
+
+  * **`mangala_td`**: The feature-based TD-Learning version. Note that this iteration currently omits the even-number capture (hole-doubling) rule. Against a random opponent, it achieves an 85-99% win rate. However, against a Minimax algorithm (depth 3), the win rate drops to a range of 18-55% (averaging around 28%).
+</details>
 
 ## Build and Run
 
 Written in plain C++17. There are no external dependencies or libraries.
 
 To compile:
-
 ```bash
 g++ -std=c++17 -O2 -o mangala_td mangala_td.cpp
-
-```
