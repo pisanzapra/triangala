@@ -8,13 +8,13 @@ Standard 2-player rules break down completely when you add a third person to the
 
 I initially tried using standard tabular Q-Learning, but it failed almost immediately due to the sheer size of the game's state space.
 
-The theoretical distribution of 48 stones across 14 slots (12 pits and 2 stores) results in approximately **2.7 trillion** possible board states. Even if we filter out the physically impossible configurations based on the game's rules, the *reachable* state space is still massive—roughly **889 billion** (comparable to similar solved mancala games like Awari).
+The theoretical distribution of 48 stones across 14 slots (12 pits and 2 stores) results in approximately **2.7 trillion** possible board states. Even if we filter out the physically impossible configurations based on the game's rules, the *reachable* state space is still massive [roughly **889 billion** (comparable to similar solved mancala games like Awari)].
 
 I ran 500,000 training games, simulating about 15 million total states. This means the agent only managed to observe around **0.0016%** of the realistic board possibilities. Whenever it encountered a board it hadn't already memorized in its table, it just defaulted to random, nonsensical moves.
 
 ## The Fix: Feature-Based TD Learning
 
-Since memorizing the board is impossible, I switched the model to **Linear Function Approximation**. Instead of tracking the exact board layout, the agent now extracts 26 core features from any given state:
+Since memorizing the board is impossible, I switched the model to Linear Function Approximation. Instead of tracking the exact board layout, the agent now extracts 26 core features from any given state:
 
 * Stone counts in its own 6 pits
 * Stone counts in the opponent's 6 pits
@@ -26,8 +26,6 @@ Since memorizing the board is impossible, I switched the model to **Linear Funct
 During self-play, the agent updates the **weights** of these features. This gives it a sort of intuition—it learns that leaving an empty pit opposite a loaded one is a bad idea, even if it has never seen that specific board combination before.
 
 ## Project Structure & Current State
-
-The codebase is currently split into a few iterations as I work out the logic. Here is where things stand:
 
 <details>
   <summary>First_Implementation folder:</summary>
@@ -47,6 +45,7 @@ The codebase is currently split into a few iterations as I work out the logic. H
   <summary>TD-Learning folder:</summary>
 
   * **`mangala_td`**: The feature-based TD-Learning version. Note that this iteration currently omits the even-number capture (hole-doubling) rule. Against a random opponent, it achieves an 85-99% win rate. However, against a Minimax algorithm (depth 3), the win rate drops to a range of 18-55% (averaging around 28%).
+  * **`mangala_td_hybrid`**: This version is a hybrid of the 2 models. Works fine for now...
 </details>
 
 ## Build and Run
