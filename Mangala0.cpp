@@ -1,11 +1,10 @@
-//Taş alınan kuyuda 1 taş bırakmıyor - (eng: when a hole selected, there have to be 1 stone remaining. in this code, all stones get taken when that hole selected. this have to be corrected.)
+// when a hole selected, there have to be 1 stone remaining. in this code, all stones get taken when that hole selected. this have to be corrected.
 
-//Sıra düzgün ilerlemiyor - (eng: Players turn do not going as they should. If the last stone goes to the main hole, the next turn is again that player's turn. If the last stone(last number) does not go the main hole, the turn is the other player's turn.)
+//Players turn do not going as they should. If the last stone goes to the main hole, the next turn is again that player's turn. If the last stone(last number) does not go the main hole, the turn is the other player's turn.
 // -*-*-*-*-*-*-*-* currentPlayer sorunlu -*-*-*-*-*-*-*-*
 
-//Eğer oyuncunun sırasında o oyuncu yanlış sayıya veya harfe basarsa uyarı verilir. (eng: if a player presses the wrong button (like a letter or a number bigger than 6) it has to give a warning like: "Yanlış Tuşa Bastınız! Tekrar Deneyiniz. (eng: "You Pressed The Wrong Button! Try Again.)")
+//if a player presses the wrong button (like a letter or a number bigger than 6) it has to give a warning like: "You Pressed The Wrong Button! Try Again."
 
-//And everything but these looking ok as far as I can see.
 
 #include <iostream>
 #include <vector>
