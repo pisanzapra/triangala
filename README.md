@@ -28,24 +28,38 @@ During self-play, the agent updates the **weights** of these features. This give
 ## Project Structure & Current State
 
 <details>
-  <summary>First_Implementation folder:</summary>
+  <summary>1) First_Implementation folder:</summary>
 
-  * **`Mangala0`**: A basic implementation, but the turn logic is bugged. Instead of properly distributing stones one by one, it just takes all the stones inside a hole. Needs fixing.
-  * **`Mangala1`**: Currently broken. The core logic failed in this iteration and requires a complete rewrite.
-  * **`MangalaGameAuto`**: The main script where the game plays itself. It uses a `makeBestMove` function to evaluate and execute the optimal move. Currently, this runs on 2-player mechanics. Once the base is completely stable, this file will be the bridge to introduce the AI for 3-player testing. The main bottleneck right now is hardcoding the custom rules needed to actually make a 3-player game function logically before the AI can train on it.
+  * **`Mangala0.cpp`**: First 2-player prototype. This one includes fundamental logical errors in turn transitions and stone distribution.
+  * **`Mangala1.cpp`**: Broken. The core logic failed in this iteration and required a complete rewrite.
+  * **`Mangala2.cpp`**: Test version. Game starts with 6 stones instead of 4. Core game mechanics were (kind of) fixed.
+  * **`MangalaGameAuto.c`**: The main script where the game plays itself. It uses a `makeBestMove` function to evaluate and execute the optimal move. Currently, this runs on 2-player mechanics. Once the base is completely stable, this file will be the bridge to introduce the AI for 3-player testing. The main bottleneck right now is hardcoding the custom rules needed to actually make a 3-player game function logically before the AI can train on it.
 </details>
 
 <details>
-  <summary>Q-Learning Version folder:</summary>
+  <summary>2) Q-Learning Version folder:</summary>
 
-  * **`mangala_ai`**: The failed tabular Q-Learning model.
+  * **`mangala_ai.cpp`**: The failed tabular Q-Learning model using classic Minimax algorithm with Alpha-Beta pruning, which tries to calculate all possibilities. This is the reference code that shows that tabular memorization fails in the face of trillions of state spaces.
 </details>
 
 <details>
-  <summary>TD-Learning folder:</summary>
+  <summary>3) TD-Learning folder:</summary>
 
-  * **`mangala_td`**: The feature-based TD-Learning version. Note that this iteration currently omits the even-number capture (hole-doubling) rule. Against a random opponent, it achieves an 85-99% win rate. However, against a Minimax algorithm (depth 3), the win rate drops to a range of 18-55% (averaging around 28%).
-  * **`mangala_td_hybrid`**: This version is a hybrid of the 2 models. Works fine for now...
+  * **`v1-mangala_td.cpp`**: The feature-based TD-Learning version. Note that this iteration lacks the even-number capture (hole-doubling) rule. Against a random opponent, it achieves an 85-99% win rate. However, against a Minimax algorithm (depth 3), the win rate drops to a range of 18-55% (averaging around 28%).
+  * **`v1-weights.txt`**: Weights for the v1. 
+  * **`hv1-mangala_td.cpp`**: Hybrid model that combines AlphaGo-style tree search with Value (V) function estimation at leaf nodes, expanding the feature set to 26 to capture complex pit interactions.
+  * **`hv1-weights.txt`**: Weights for the first hybrid model, hv1. 
+  * **`hv2-mangala_td.cpp`**: The most advanced 2-player agent. Implements Curriculum Learning by dynamically decaying the learning rate (alpha) and exploration rate (epsilon), while progressively increasing search depth as the agent matures.
+  * **`hv2-weights.txt`**: Weights for the second agent model. 
+</details>
+
+<details>
+  <summary>4) TRIANGALA:</summary>
+
+  * **`triangala_base.cpp `**: The very first mathematical translation of the board to 3 players (21 array positions). It solves the "opposite pit" geometry and tests basic interactive variants.
+  * **`triangala_v2_rule.cpp`**: A transitional update that refines and fixes the logic of the experimental capture variants.
+  * **`triangala_v3_ai.cpp`**: Integrates a 3-Player Max^n Search Algorithm into the experimental rule laboratory. Uses a "Paranoid Heuristic" where the AI specifically targets the leading player rather than averaging opponents' scores.
+  * **`triangala_final.cpp`**: Final version. Fully optimized 3+ Player Mangala (Triangala as I call) engine.
 </details>
 
 ## Build and Run
@@ -54,4 +68,4 @@ Written in plain C++17. There are no external dependencies or libraries.
 
 To compile:
 ```bash
-g++ -std=c++17 -O2 -o mangala_td mangala_td.cpp
+g++ -std=c++17 -O2 -o Triangala_Engine 4_Triangala_3P_Final/triangala_final.cpp
