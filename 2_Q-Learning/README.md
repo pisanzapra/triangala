@@ -1,0 +1,1 @@
+The tabular Q-Learning approach was initially used to train the agent, but it failed due to the massive state space.This Q-Learning version is first used to elaborate the agent but since there are so many possible moves, this model failed. 
