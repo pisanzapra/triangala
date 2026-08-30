@@ -1,7 +1,9 @@
-// according to rules, stones goes right but when there are 1 stone left and when that hole is selected, tha hole becomes empty. but in this code it does not become empty. there are always 1 stone left which is we dont want.
-// tur: kurallara göre taşlar doğru gidiyor ama eğer bir kuyuda 1 taş kaldıysa ve o kuyu oynandıysa normalde o kuyunun boş olması ve o son taşın diğer kuyuya gitmesi gerekir
+//when a move made to play, player has to enter a number to make a move from that hole. and if player choses a number bigger than 6 and/or a input different from a number, this code has to print "wrong input. try again"
+// and if there is n stones inside a hole, there has to be 1 stone left in that hole. and the next holes has to be add by 1. for example, there is 6 stones in the 3rd hole. if i press 3, 1 stone has to be left in the 3th hole. and by the equation "n-1", there has to be next 6-1=5 holes has to be add by 1.
 
 //Players turn do not going as they should. If the last stone goes to the main hole, the next turn is again that player's turn. If the last stone(last number) does not go the main hole, the turn is the other player's turn.
+
+
 
 #include <iostream>
 #include <vector>
@@ -36,25 +38,18 @@ public:
     //-*-*-*-*-*-*-*-* arrange holes from here -*-*-*-*-*-*-*-*-*-*-*
     // 
     void makeMove(int index) {
-
-        if (board[index] == 0) {
-            // You can't make a move when an empty hole selected.
-            cout << "Boş kuyuyu oynayamazsınız. Tekrar deneyin." << endl;
-            return;
-        }
-
         int stones = board[index];
-        board[index] = 0;
+        board[index] = +1;
 
-        //this looks wrong. solve it
         while (stones > 0) {
+            index = (index + 1) % 14;
             if (index == 0 && currentPlayer == 2)
                 continue;
             board[index]++;
             stones--;
-            index = index+1 % 14;
-            cout << index << " " << stones << endl;
         }
+
+	//if a move made on a hole that has no stones, it is not allowed.
 	
 
         if (index != 0 && index != 7) {
@@ -137,7 +132,7 @@ int main() {
         cout << "=====================================" << endl; ;
         cout << "Oyuncu " << game.getCurrentPlayer() << "'in Sırası." << endl;
         game.printBoard();
-        cout << "Oynamak İstediğiniz Kuyuyu Seçiniz: " ;
+        cout << "Oynamak İstediğiniz Kuyuyu Seçiniz: " /*<< endl*/;
         cin >> move;
         
         if (cin.fail() || move < 1 || move > 6) {
