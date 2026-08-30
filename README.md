@@ -8,7 +8,7 @@ Standard 2-player rules break down completely when you add a third person to the
 
 I initially tried using standard tabular Q-Learning, but it failed almost immediately due to the sheer size of the game's state space.
 
-The theoretical distribution of 48 stones across 14 slots (12 pits and 2 stores) results in approximately **2.7 trillion** possible board states. Even if we filter out the physically impossible configurations based on the game's rules, the *reachable* state space is still massive [roughly **889 billion** (comparable to similar solved mancala games like Awari)].
+The theoretical distribution of 48 stones across 14 slots (12 pits and 2 stores) results in approximately **2.7 trillion** possible board states. Even if we filter out the physically impossible configurations based on the game's rules, the *reachable* state space is still massive [roughly **889 billion** (comparable to similar solved mancala games like Owari/Awale)].
 
 I ran 500,000 training games, simulating about 15 million total states. This means the agent only managed to observe around **0.0016%** of the realistic board possibilities. Whenever it encountered a board it hadn't already memorized in its table, it just defaulted to random, nonsensical moves.
 
