@@ -1,0 +1,4 @@
+  * **`Mangala0.cpp`**: First 2-player prototype. This one includes fundamental logical errors in turn transitions and stone distribution.
+  * **`Mangala1.cpp`**: Broken. The core logic failed in this iteration and required a complete rewrite.
+  * **`Mangala2.cpp`**: Test version. Game starts with 6 stones instead of 4. Core game mechanics were (kind of) fixed.
+  * **`MangalaGameAuto.c`**: The main script where the game plays itself. It uses a `makeBestMove` function to evaluate and execute the optimal move. Currently, this runs on 2-player mechanics. Once the base is completely stable, this file will be the bridge to introduce the AI for 3-player testing. The main bottleneck right now is hardcoding the custom rules needed to actually make a 3-player game function logically before the AI can train on it.
