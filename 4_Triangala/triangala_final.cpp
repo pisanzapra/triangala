@@ -1,4 +1,4 @@
-// TRIANGALA (3 Kisilik Mangala) - Resmi Kural Seti (Nihai Surum)
+// TRIANGALA (3+ Player Mangala) - Last Rule Set
 // -----------------------------------------------------------------
 // BOARD DUZENI (21 pozisyon, indeks 0-20):
 //   1-6   : Oyuncu 1'in kuyulari       7  : Oyuncu 1'in hazinesi
@@ -75,21 +75,21 @@ MoveResult applyMove(vector<int>& board, int player, int index) {
     int idx = index;
     int lastIndex = index;
 
-    // KURAL 1: Orijinal Turk Mangalasi Dagitimi
+    // Rule 1: OG Turkish Mangala Distrubition
     if (stones == 1) {
-        // Sadece 1 tas varsa, alinan kuyu bosalir, tas bir sonrakine gecer.
+        // Sadece 1 tas varsa, alinan kuyu bosalir, tas bir sonrakine gecer
         // NOT: index buraya HER ZAMAN mevcut oyuncunun KENDI kuyu araligindan
         // gelir (getValidMoves ve main() girdi dogrulamasi bunu garanti eder).
         // Board duzeninde her oyuncunun 6 kuyusunun hemen ardindan YALNIZCA
         // kendi hazinesi gelir (1-6->7, 8-13->14, 15-20->0) - hicbir kuyunun
         // hemen sonrasi BASKA bir oyuncunun hazinesi olamaz. Bu yuzden tek
         // adimlik ilerleme hicbir zaman bir hazine atlamaya ihtiyac duymaz;
-        // bir dongu yerine dogrudan tek adim yeterli ve daha sade.
+        // bir dongu yerine dogrudan tek adim yeterli ve daha sade
         idx = (idx + 1) % NUM_POS;
         board[idx]++;
         lastIndex = idx;
     } else {
-        // Birden fazla tas varsa, ALINAN ILK TAS KENDI KUYUSUNA BIRAKILIR.
+        // birden fazla tas varsa, alinan ilk tas o kuyuya birakilir
         board[index]++;
         stones--;
         while (stones > 0) {
@@ -103,7 +103,7 @@ MoveResult applyMove(vector<int>& board, int player, int index) {
 
     bool extraTurn = (lastIndex == ownSt);
 
-    // KURAL 2: Ciftleme ile Tas Kapma
+    // Rule 2: Doubling
     if (!extraTurn && !isOwnPit(player, lastIndex) && !isStore(lastIndex)) {
         if (board[lastIndex] % 2 == 0) { // 2, 4, 6, 8 vb. cift sayiysa
             board[ownSt] += board[lastIndex];
@@ -111,7 +111,7 @@ MoveResult applyMove(vector<int>& board, int player, int index) {
         }
     }
 
-    // KURAL 3: Canli Kuyu - Oyun tum 18 kuyu tamamen bosalinca biter
+    // Rule 3: Living Hole (Canli Kuyu) - game ends when all holes are empty (oyun tum 18 kuyu tamamen bosalinca biter)
     bool over = (totalPitStones(board) == 0);
 
     int nextPlayer = player;
@@ -150,7 +150,7 @@ void printBoard(const vector<int>& board) {
     cout << " | Hazine1: " << board[7] << "\n\n";
 }
 
-// ==================== 3 KISILIK AI (max^n ARAMA) ====================
+// 3 PLATER AI (max^n search)
 
 using ValueVec = array<double, 4>; 
 
@@ -227,7 +227,7 @@ int chooseMaxNMove(const vector<int>& board, int player, int maxDepth, int timeB
             }
         }
         if (ranOutOfTime) break;
-        // Esit degerli birden fazla en-iyi hamle varsa aralarindan rastgele sec.
+        // esit degerli hamle varsa birden fazla, aralarindan rastgele secim yapilsin
         // rng() % n modulo-bias tasiyabilecegi icin (n, 2^32'yi tam bolmuyorsa
         // bazi degerler istatistiksel olarak cok hafif kayirilir) std::uniform_int_distribution
         // kullaniyoruz - bu, [0, n-1] araliginda gercekten esit dagilim garantiler.
@@ -274,7 +274,7 @@ int main() {
     // Guvenlik siniri: Canli Kuyu sisteminde teorik olarak (ozellikle capture
     // hic tetiklenmeyen kotu sansli/inatci oyunlarda) oyun cok uzayabilir.
     // 200+ simule oyunda hicbir zaman 160 hamleyi gecmedi, ama insan oyuncular
-    // kasten oyalayabilecegi icin ucuz bir guvenlik agi olarak birakiyoruz.
+    // kasten oyalayabilecegi icin ucuz bir guvenlik agi olarak birakildi.
     const int MAX_MOVES = 1000;
 
     while (!gameOver) {
