@@ -1,33 +1,4 @@
-// Mangala (Mancala/Kalah) - 3 KISILIK Konsol Oyunu
-// -----------------------------------------------------------------
-// BOARD DUZENI (21 pozisyon, indeks 0-20):
-//   1-6   : Oyuncu 1'in kuyulari       7  : Oyuncu 1'in hazinesi
-//   8-13  : Oyuncu 2'nin kuyulari      14 : Oyuncu 2'nin hazinesi
-//   15-20 : Oyuncu 3'un kuyulari       0  : Oyuncu 3'un hazinesi
-// (2 kisilik versiyondaki "0 = son oyuncunun hazinesi, dongu ondan
-//  once biter" yapisi burada da aynen korunuyor, sadece 3 oyuncuya
-//  genisletildi.)
-//
-// KURAL FARKLARI (2 kisilikten 3 kisiye genisletirken alinan kararlar):
-//
-// 1) TAS KAPMA (capture) - "karsi kuyu" kavrami: 18 kuyuyu (hazineler
-//    haric) bir cember gibi dusunup, bir kuyunun "tam karsisini" 9 kuyu
-//    ileride tanimliyoruz (18/2=9). Bu, her kuyuyu iki rakipten TAM
-//    OLARAK BIRINE ait belirli bir kuyuyla eslestiriyor - matematiksel
-//    olarak net tanimli, ama simetrik hissetmeyebilir (bir oyuncunun
-//    kuyularinin bir kismi bir rakibe, kalani digerine karsi dusuyor).
-//
-// 2) OYUN BITISI - ELEME SISTEMI: 2 kisilikte kural basitti (bir
-//    tarafin kuyulari bosaldi mi oyun biter). 3 kisilikte bunun yerine:
-//    bir oyuncunun TUM kuyulari boşaldiginda o oyuncu ELENIR (sirasi
-//    atlanir, kuyulari artik hicbir sekilde tas almaz - taşlar zaten
-//    hep 0 oldugu icin bu, "kuyularini oyunun geri kalaninda cemberden
-//    cikarmak" ile ayni anlama gelir). Oyun, SADECE BIR oyuncu tas
-//    sahibi kalana kadar devam eder; o oyuncu kendi kuyularindaki
-//    taslari kendi hazinesine supurur ve oyun biter. Kazanan = en
-//    yuksek hazineye sahip oyuncu.
-// -----------------------------------------------------------------
-
+// Mangala (Mancala/Kalah) - 3 PLAYER BASE VERSION (test)
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -66,7 +37,7 @@ bool isStore(int idx) { return idx == 0 || idx == 7 || idx == 14; }
 
 int nextInRotation(int player) { return (player % 3) + 1; }
 
-// Bir kuyunun 18-kuyuluk cember uzerindeki "tam karsisi"ni bulur (9 kuyu ileride).
+// Bir kuyunun 18-kuyuluk cember uzerindeki "tam karsisi"ni bulur (9 kuyu ileride) ama duzenlenebilir
 int oppositePit(int idx) {
     int owner = pitOwner(idx);
     int localIdx = idx - pitStart(owner);           // 0-5
