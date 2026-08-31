@@ -1,4 +1,4 @@
-// TRIANGALA (3+ Player Mangala) - Last Rule Set
+// TRIANGALA (3+ Player Mangala) - Last Rule Set - DIRECTORS FINAL CUT
 // -----------------------------------------------------------------
 // BOARD DUZENI (21 pozisyon, indeks 0-20):
 //   1-6   : Oyuncu 1'in kuyulari       7  : Oyuncu 1'in hazinesi
