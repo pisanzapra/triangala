@@ -57,7 +57,6 @@ bool isOwnPit(int player, int idx) {
 }
 
 int pitOwner(int idx) {
-    // Yalnizca gercek bir kuyu (store degil) icin cagrilmali.
     if (idx >= 1 && idx <= 6) return 1;
     if (idx >= 8 && idx <= 13) return 2;
     if (idx >= 15 && idx <= 20) return 3;
@@ -68,7 +67,6 @@ bool isStore(int idx) { return idx == 0 || idx == 7 || idx == 14; }
 
 int nextInRotation(int player) { return (player % 3) + 1; }
 
-// Bir kuyunun 18-kuyuluk cember uzerindeki "tam karsisi"ni bulur (9 kuyu ileride).
 int oppositePit(int idx) {
     int owner = pitOwner(idx);
     int localIdx = idx - pitStart(owner);           // 0-5
@@ -79,7 +77,7 @@ int oppositePit(int idx) {
     return pitStart(oppOwner) + oppLocal;
 }
 
-// ---------------------- KAPMA (capture) KURAL VARYANTLARI ----------------------
+// KAPMA (capture) KURAL VARYANTLARI - TEST EDILECEK
 // 1 = SABIT_KARSI   : 18-kuyuluk cemberde 9-ileri = karsi kuyu (mevcut/klasik-genisletme).
 //                     NOT: Bu, 18/6=3 oyunculu bir cemberde matematiksel olarak
 //                     kacinilmaz bir asimetri yaratir - bir oyuncunun 6 kuyusundan
@@ -193,7 +191,7 @@ void performCapture(vector<int>& board, int player, int lastIndex, bool interact
     }
 }
 
-// ---------------------- ELEME KURALI VARYANTLARI ----------------------
+// ELEME KURALI VARYANTLARI
 // 1 = KALICI (UNO tarzi)  : kuyulari bosalan oyuncu cemberden tamamen cikar,
 //                            bir daha asla tas alamaz, sirasi surekli atlanir.
 // 2 = CANLI_KUYU (toparlanabilir): kuyulari bosalan oyuncu sadece O TURDA
@@ -205,12 +203,12 @@ void performCapture(vector<int>& board, int player, int lastIndex, bool interact
 // ortalama 2.67/3 sirayla bitiriyor (neredeyse hep sonuncu) - net bir
 // haksizlik. CANLI_KUYU modelinde bu fark 2.20/3'e iniyor - cok daha adil,
 // bedeli sadece biraz daha uzun oyun (~76 -> ~90 hamle).
-int ELIMINATION_MODE = 2; // varsayilan: daha adil olan CANLI_KUYU
+int ELIMINATION_MODE = 2; // varsayilan: daha adil olan CANLI_KUYU secili
 
 // Bir oyuncunun tum kuyulari bos mu? (dinamik olarak hesaplaniyor - ayri bir
 // "elenmis" bayragina gerek yok, cunku bir oyuncu bir kez 0'a dustugunde
 // sowing sirasinda atlanacagi icin bir daha asla tas alamiyor, yani bu kontrol
-// kalici bir "eleme" ile ayni sonucu veriyor.)
+// kalici bir "eleme" ile ayni sonucu veriyo.)
 bool isPlayerOut(const vector<int>& board, int player) {
     int s = pitStart(player);
     for (int i = s; i <= s + 5; ++i) if (board[i] > 0) return false;
@@ -383,8 +381,7 @@ ValueVec maxN(vector<int> board, int player, int depth, const Clock::time_point&
 // Zaman butceli iteratif derinlestirme: depth=2'den maxDepth'e kadar artan
 // derinliklerde arar, her derinligi TAMAMEN bitirebilirse sonucu kullanir.
 // Sure dolarsa yarim kalan derinligi atar ve bir onceki tamamlanmis derinligin
-// sonucunu dondurur - boylece "Zor" (derinlik 8) secimi bile sistemi asla
-// kilitlemez.
+// sonucunu dondurur - boylece "Zor" (derinlik 8) secimi bile sistemi asla kilitlemez
 int chooseMaxNMove(const vector<int>& board, int player, int maxDepth, int timeBudgetMs = 2000) {
     vector<int> moves = getValidMoves(board, player);
     int bestMove = moves.front();
